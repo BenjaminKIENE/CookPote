@@ -9,7 +9,7 @@ set -euo pipefail
 APP_DIR="/var/www/cookpote"
 APP_USER="cookpote"
 LOG_DIR="/var/log/cookpote"
-REPO_URL="https://github.com/TON_USERNAME/cookpote.git"  # ← à modifier
+REPO_URL="https://github.com/BenjaminKIENE/cookpote.git"  # ← à modifier
 
 echo "════════════════════════════════════════"
 echo " Cookpote — Setup VPS"
