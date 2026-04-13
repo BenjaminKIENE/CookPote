@@ -31,21 +31,30 @@ apt-get install -y git curl build-essential
 echo "▶ Creating system user '$APP_USER'..."
 id "$APP_USER" &>/dev/null || useradd --system --shell /usr/sbin/nologin --home "$APP_DIR" "$APP_USER"
 
-# ── 4. Create directories ────────────────────────────────────
-echo "▶ Creating directories..."
-mkdir -p "$APP_DIR"
+# ── 4. Clone or update repository ───────────────────────────
+echo "▶ Cloning repository..."
+if [ ! -d "$APP_DIR/.git" ]; then
+  if [ -d "$APP_DIR" ] && [ "$(ls -A $APP_DIR)" ]; then
+    # Directory exists but not a git repo — init in place
+    cd "$APP_DIR"
+    git init
+    git remote add origin "$REPO_URL"
+    git fetch origin
+    git checkout -b main --track origin/main || git checkout main
+  else
+    git clone "$REPO_URL" "$APP_DIR"
+  fi
+else
+  echo "  Repo already present, pulling latest..."
+  cd "$APP_DIR" && git pull
+fi
+
+# ── 5. Create data directories ───────────────────────────────
+echo "▶ Creating data directories..."
 mkdir -p "$APP_DIR/backend/data"
 mkdir -p "$APP_DIR/backend/uploads"
 mkdir -p "$LOG_DIR"
 touch "$APP_DIR/backend/uploads/.gitkeep"
-
-# ── 5. Clone repository ──────────────────────────────────────
-echo "▶ Cloning repository..."
-if [ ! -d "$APP_DIR/.git" ]; then
-  git clone "$REPO_URL" "$APP_DIR"
-else
-  echo "  Repo already cloned, skipping."
-fi
 
 # ── 6. Install dependencies & build ──────────────────────────
 echo "▶ Installing backend dependencies..."
