@@ -11,6 +11,7 @@ build/
 # Environment files — NEVER commit
 .env
 .env.prod
+.env.e2e
 .env.local
 .env.*.local
 

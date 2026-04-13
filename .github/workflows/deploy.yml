@@ -7,13 +7,11 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to VPS
+    name: Deploy to VPS — ${{ github.ref_name }}
     runs-on: ubuntu-latest
     environment: production
 
     steps:
-      - uses: actions/checkout@v4
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
@@ -23,29 +21,4 @@ jobs:
           script: |
             set -e
             cd /var/www/cookpote
-
-            echo "── Pull latest code ──"
-            git fetch --tags
-            git checkout ${{ github.ref_name }}
-
-            echo "── Install backend deps ──"
-            cd backend
-            npm ci --omit=dev
-
-            echo "── Install & build frontend ──"
-            cd ../frontend
-            npm ci
-            npm run build
-
-            echo "── Run migrations ──"
-            cd ../backend
-            node --import tsx/esm src/db/migrate.js
-
-            echo "── Restart service ──"
-            sudo systemctl restart cookpote-backend
-
-            echo "── Health check ──"
-            sleep 3
-            curl -sf http://localhost:3000/health || (echo "Health check failed" && exit 1)
-
-            echo "✅ Deploy complete — ${{ github.ref_name }}"
+            bash deploy/update.sh ${{ github.ref_name }}

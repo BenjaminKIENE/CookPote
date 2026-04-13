@@ -1,0 +1,28 @@
+[Unit]
+Description=Cookpote Backend (Fastify)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=cookpote
+Group=cookpote
+WorkingDirectory=/var/www/cookpote/backend
+
+# Load environment from file — NEVER commit this file
+EnvironmentFile=/var/www/cookpote/backend/.env
+
+ExecStart=/usr/bin/node dist/src/index.js
+Restart=on-failure
+RestartSec=5s
+StandardOutput=append:/var/log/cookpote/app.log
+StandardError=append:/var/log/cookpote/app.log
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/www/cookpote/backend/data /var/www/cookpote/backend/uploads /var/log/cookpote
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

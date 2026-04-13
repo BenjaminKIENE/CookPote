@@ -1,0 +1,13 @@
+/var/log/cookpote/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
+    delaycompress
+    notifempty
+    create 0640 cookpote cookpote
+    sharedscripts
+    postrotate
+        systemctl kill --signal=SIGUSR1 cookpote-backend 2>/dev/null || true
+    endscript
+}
