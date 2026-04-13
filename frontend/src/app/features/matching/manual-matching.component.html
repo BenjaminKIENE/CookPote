@@ -1,0 +1,51 @@
+<div class="matching-page">
+  <h1>Qu'est-ce que j'ai ?</h1>
+  <p class="matching-page__subtitle">Saisis les ingrédients que tu as, on trouve les recettes faisables.</p>
+
+  <div class="matching-page__input">
+    <app-ingredient-input
+      placeholder="Ajouter un ingrédient..."
+      (selected)="addIngredient($event)"
+    />
+  </div>
+
+  @if (selectedIngredients().length > 0) {
+    <div class="matching-page__chips">
+      @for (ing of selectedIngredients(); track ing.id) {
+        <span class="chip">
+          {{ ing.nomCanonique }}
+          <button (click)="removeIngredient(ing.id)" class="chip__remove" aria-label="Retirer">×</button>
+        </span>
+      }
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="matching-page__loading">Recherche...</div>
+  }
+
+  @if (!loading() && results().length > 0) {
+    <div class="matching-results">
+      @for (result of results(); track result.recipe.id) {
+        <div class="match-item">
+          <div class="match-item__score">
+            <span class="match-item__pct">{{ result.score }}%</span>
+            <span class="match-item__frac">{{ result.matchedCount }}/{{ result.totalCount }}</span>
+          </div>
+          <div class="match-item__card">
+            <app-recipe-card [recipe]="recipeAsListItem(result)" />
+          </div>
+          @if (result.missingIngredients.length > 0) {
+            <p class="match-item__missing">
+              Manque : {{ result.missingIngredients.join(', ') }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading() && selectedIngredients().length > 0 && results().length === 0) {
+    <div class="empty-state"><p>Aucune recette trouvée avec ces ingrédients.</p></div>
+  }
+</div>

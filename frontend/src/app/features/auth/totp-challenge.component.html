@@ -1,0 +1,37 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__logo">🍲 Cookpote</div>
+    <h1 class="auth-card__title">Double authentification</h1>
+    <p class="auth-card__subtitle">
+      Ouvre ton application d'authentification et saisis le code à 6 chiffres.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="code">Code à 6 chiffres</label>
+        <input id="code" type="text" inputmode="numeric" class="form-input auth-card__code-input"
+          [class.is-error]="fieldError('code')"
+          formControlName="code"
+          autocomplete="one-time-code"
+          placeholder="000000"
+          maxlength="6" />
+        @if (fieldError('code')) {
+          <span class="form-error">{{ fieldError('code') }}</span>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <div class="auth-card__error">{{ errorMessage() }}</div>
+      }
+
+      <button type="submit" class="btn btn-primary auth-card__submit" [disabled]="loading()">
+        @if (loading()) { <span class="spinner"></span> }
+        Vérifier
+      </button>
+    </form>
+
+    <p class="auth-card__switch">
+      <a routerLink="/login">← Retour à la connexion</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,172 @@
+@use 'styles/variables' as v;
+@use 'styles/mixins' as m;
+
+.profile-page {
+  max-width: 600px;
+  margin: 0 auto;
+
+  h1 {
+    font-family: v.$font-display;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.profile-card {
+  @include m.card;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+
+  &__avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  &__avatar, &__avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__avatar-placeholder {
+    background: v.$terracotta;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  &__avatar-btn { cursor: pointer; }
+
+  &__email { color: v.$text-secondary; font-size: .9rem; margin: 0; }
+  &__stat  { color: v.$text-muted; font-size: .85rem; margin: .25rem 0 0; }
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.profile-section {
+  border-top: 1px solid v.$cream-dark;
+  padding: 1.5rem 0;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+    color: v.$text-primary;
+  }
+
+  &__current {
+    font-size: .9rem;
+    color: v.$text-secondary;
+    margin: 0 0 .75rem;
+  }
+
+  &__hint {
+    font-size: .85rem;
+    color: v.$text-muted;
+    margin: -.25rem 0 .5rem;
+  }
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 0;
+
+  &__actions {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+  }
+}
+
+.profile-2fa {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+
+  p { margin: 0; font-size: .9rem; line-height: 1.5; }
+
+  &--active { }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    background: #D4EDDA;
+    color: #155724;
+    padding: .25rem .75rem;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    width: fit-content;
+
+    &::before { content: '✓'; }
+  }
+
+  &__setup {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1rem;
+    background: v.$cream-dark;
+    border-radius: var(--radius-md);
+    border: 1px solid v.$cream-dark;
+
+    p { margin: 0; font-size: .9rem; }
+  }
+
+  &__qr {
+    width: 180px;
+    height: 180px;
+    border-radius: var(--radius-sm);
+    border: 1px solid v.$cream-dark;
+  }
+
+  &__secret {
+    font-size: .8rem;
+    color: v.$text-muted;
+
+    code {
+      font-family: monospace;
+      background: v.$cream-dark;
+      padding: 2px 6px;
+      border-radius: 4px;
+      word-break: break-all;
+    }
+  }
+}
+
+.form-input--code {
+  max-width: 140px;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: .4em;
+  font-family: monospace;
+}
+
+.profile-danger {
+  border-top: 1px solid v.$cream-dark;
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+
+  h2 { font-size: 1rem; margin: 0 0 .5rem; color: v.$text-secondary; }
+
+  &__delete { color: var(--color-error); }
+}

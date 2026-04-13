@@ -1,0 +1,15 @@
+// ============================================================
+// Cookpote — Global Styles
+// @use rules must come before everything else
+// ============================================================
+
+@use 'styles/variables';
+@use 'styles/reset';
+@use 'styles/typography';
+@use 'styles/mixins';
+@use 'styles/components';
+@use 'styles/auth';
+
+// Google Fonts — Playfair Display (titles) + Inter (body)
+// Loaded after @use to satisfy SCSS rules
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap');

@@ -1,0 +1,58 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__logo">🍲 Cookpote</div>
+    <h1 class="auth-card__title">Créer un compte</h1>
+
+    @if (success()) {
+      <div class="auth-card__success">
+        Compte créé ! Vérifie tes emails pour activer ton compte.
+      </div>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input id="email" type="email" class="form-input"
+            [class.is-error]="fieldError('email')"
+            formControlName="email" autocomplete="email" placeholder="toi@exemple.fr" />
+          @if (fieldError('email')) {
+            <span class="form-error">{{ fieldError('email') }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pseudo">Pseudo</label>
+          <input id="pseudo" type="text" class="form-input"
+            [class.is-error]="fieldError('pseudo')"
+            formControlName="pseudo" autocomplete="username" placeholder="tonpseudo" />
+          @if (fieldError('pseudo')) {
+            <span class="form-error">{{ fieldError('pseudo') }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe</label>
+          <input id="password" type="password" class="form-input"
+            [class.is-error]="fieldError('password')"
+            formControlName="password" autocomplete="new-password" placeholder="8 caractères minimum" />
+          @if (fieldError('password')) {
+            <span class="form-error">{{ fieldError('password') }}</span>
+          }
+          <span class="form-hint">8 caractères minimum, une majuscule, un chiffre.</span>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="auth-card__error">{{ errorMessage() }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary auth-card__submit" [disabled]="loading()">
+          @if (loading()) { <span class="spinner"></span> }
+          Créer mon compte
+        </button>
+      </form>
+    }
+
+    <p class="auth-card__switch">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+  </div>
+</div>

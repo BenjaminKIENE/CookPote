@@ -1,0 +1,35 @@
+<div class="app-layout">
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a routerLink="/app/feed" class="app-header__logo">🍲 Cookpote</a>
+
+      <nav class="app-header__nav" [class.is-open]="mobileMenuOpen()">
+        <a routerLink="/app/feed" routerLinkActive="is-active" class="nav-link">Découvrir</a>
+        <a routerLink="/app/recipes" routerLinkActive="is-active" class="nav-link">Mes recettes</a>
+        <a routerLink="/app/scan" routerLinkActive="is-active" class="nav-link">Scan Frigo</a>
+        <a routerLink="/app/matching" routerLinkActive="is-active" class="nav-link">Frigo ?</a>
+      </nav>
+
+      <div class="app-header__actions">
+        <a routerLink="/app/recipes/new" class="btn-primary btn-sm">+ Recette</a>
+        <a routerLink="/app/profile" class="app-header__avatar" [title]="authService.currentUser()?.pseudo ?? ''">
+          {{ authService.currentUser()?.pseudo?.charAt(0)?.toUpperCase() }}
+        </a>
+        <button class="btn-ghost btn-sm" (click)="logout()">Déconnexion</button>
+      </div>
+
+      <button
+        class="app-header__burger"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        aria-label="Menu"
+      >☰</button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+
+  <app-toast-container />
+</div>

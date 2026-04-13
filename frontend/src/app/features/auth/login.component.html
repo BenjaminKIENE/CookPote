@@ -1,0 +1,45 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__logo">🍲 Cookpote</div>
+    <h1 class="auth-card__title">Connexion</h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input id="email" type="email" class="form-input"
+          [class.is-error]="fieldError('email')"
+          formControlName="email" autocomplete="email" placeholder="toi@exemple.fr" />
+        @if (fieldError('email')) {
+          <span class="form-error">{{ fieldError('email') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Mot de passe</label>
+        <input id="password" type="password" class="form-input"
+          [class.is-error]="fieldError('password')"
+          formControlName="password" autocomplete="current-password" placeholder="••••••••" />
+        @if (fieldError('password')) {
+          <span class="form-error">{{ fieldError('password') }}</span>
+        }
+      </div>
+
+      <div class="auth-card__forgot">
+        <a routerLink="/forgot-password">Mot de passe oublié ?</a>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="auth-card__error">{{ errorMessage() }}</div>
+      }
+
+      <button type="submit" class="btn btn-primary auth-card__submit" [disabled]="loading()">
+        @if (loading()) { <span class="spinner"></span> }
+        Se connecter
+      </button>
+    </form>
+
+    <p class="auth-card__switch">
+      Pas encore de compte ? <a routerLink="/register">Créer un compte</a>
+    </p>
+  </div>
+</div>

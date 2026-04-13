@@ -1,0 +1,25 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__logo">🍲 Cookpote</div>
+    <h1 class="auth-card__title">Vérification email</h1>
+
+    @if (loading()) {
+      <div class="auth-card__subtitle" style="text-align:center">
+        <span class="spinner" style="margin: 0 auto"></span>
+        <br>Vérification en cours…
+      </div>
+    } @else if (success()) {
+      <div class="auth-card__success">
+        Ton email est confirmé ! Tu peux maintenant te connecter.
+      </div>
+      <a routerLink="/login" class="btn btn-primary auth-card__submit" style="margin-top: 1rem; display:block; text-align:center">
+        Se connecter
+      </a>
+    } @else {
+      <div class="auth-card__error">{{ errorMessage() }}</div>
+      <button class="btn btn-secondary auth-card__submit" (click)="resend()" style="margin-top: 1rem">
+        Renvoyer un email de vérification
+      </button>
+    }
+  </div>
+</div>

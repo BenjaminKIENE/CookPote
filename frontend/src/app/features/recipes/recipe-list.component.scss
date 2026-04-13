@@ -1,0 +1,43 @@
+@use 'styles/variables' as v;
+
+.recipe-list {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-family: v.$font-display;
+      font-size: 1.75rem;
+      margin: 0;
+    }
+  }
+
+  &__filters { margin-bottom: 1.25rem; }
+
+  &__item { position: relative; }
+
+  &__actions {
+    display: flex;
+    gap: .5rem;
+    margin-top: .5rem;
+    justify-content: flex-end;
+  }
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: v.$text-secondary;
+
+  a { color: v.$terracotta; }
+}
+
+.btn-danger { color: var(--color-error); }

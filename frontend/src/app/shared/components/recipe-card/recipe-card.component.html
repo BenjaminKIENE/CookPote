@@ -1,0 +1,32 @@
+<article class="recipe-card" [routerLink]="['/app/recipes', recipe.id]">
+  <div class="recipe-card__photo">
+    @if (photoUrl) {
+      <img [src]="photoUrl" [alt]="recipe.title" loading="lazy" />
+    } @else {
+      <div class="recipe-card__photo-placeholder">🍽️</div>
+    }
+    <span class="recipe-card__category badge">{{ categoryLabels[recipe.category] }}</span>
+  </div>
+
+  <div class="recipe-card__body">
+    <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+
+    @if (recipe.description) {
+      <p class="recipe-card__desc">{{ recipe.description }}</p>
+    }
+
+    <div class="recipe-card__meta">
+      <span class="recipe-card__difficulty badge badge--{{ recipe.difficulty }}">
+        {{ difficultyLabels[recipe.difficulty] }}
+      </span>
+      @if (totalTime) {
+        <span class="recipe-card__time">⏱ {{ totalTime }} min</span>
+      }
+      <span class="recipe-card__servings">👤 {{ recipe.servings }}</span>
+    </div>
+
+    <div class="recipe-card__footer">
+      <span class="recipe-card__author">{{ recipe.authorPseudo }}</span>
+    </div>
+  </div>
+</article>

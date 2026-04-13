@@ -1,0 +1,8 @@
+<div class="toast-container">
+  @for (toast of notifications.toasts(); track toast.id) {
+    <div class="toast toast--{{ toast.type }}" role="alert">
+      <span class="toast__message">{{ toast.message }}</span>
+      <button class="toast__close" (click)="notifications.dismiss(toast.id)" aria-label="Fermer">×</button>
+    </div>
+  }
+</div>

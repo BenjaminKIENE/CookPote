@@ -1,0 +1,49 @@
+@use 'styles/variables' as v;
+@use 'styles/mixins' as m;
+
+.feed {
+  &__header {
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    font-family: v.$font-display;
+    font-size: 1.75rem;
+    color: v.$text-primary;
+    margin: 0 0 1rem;
+  }
+
+  &__filters {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  &__search {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__error {
+    color: var(--color-error);
+    margin-bottom: 1rem;
+  }
+
+  &__loading {
+    text-align: center;
+    padding: 2rem;
+    color: v.$text-secondary;
+  }
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: v.$text-secondary;
+}

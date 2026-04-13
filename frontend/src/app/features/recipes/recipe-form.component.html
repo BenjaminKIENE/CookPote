@@ -1,0 +1,130 @@
+<div class="recipe-form-page">
+  <h1>{{ isEdit ? 'Modifier la recette' : 'Nouvelle recette' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="recipe-form">
+
+    <!-- Photo -->
+    <div class="form-group">
+      <label class="form-label">Photo</label>
+      @if (photoPreview()) {
+        <img [src]="photoPreview()" class="recipe-form__preview" alt="Aperçu" />
+      }
+      <input type="file" accept="image/*" capture="environment" (change)="onPhotoChange($event)" class="form-input" />
+    </div>
+
+    <!-- Title -->
+    <div class="form-group">
+      <label class="form-label" for="title">Titre *</label>
+      <input id="title" type="text" class="form-input" formControlName="title" placeholder="Nom de la recette" />
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" formControlName="description" rows="3" placeholder="Décris ta recette..."></textarea>
+    </div>
+
+    <!-- Category + Difficulty -->
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Catégorie</label>
+        <select class="form-select" formControlName="category">
+          @for (opt of categoryOptions; track opt[0]) {
+            <option [value]="opt[0]">{{ opt[1] }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Difficulté</label>
+        <select class="form-select" formControlName="difficulty">
+          @for (opt of difficultyOptions; track opt[0]) {
+            <option [value]="opt[0]">{{ opt[1] }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Times + Servings -->
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Prép. (min)</label>
+        <input type="number" class="form-input" formControlName="prepTimeMin" min="0" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cuisson (min)</label>
+        <input type="number" class="form-input" formControlName="cookTimeMin" min="0" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Portions</label>
+        <input type="number" class="form-input" formControlName="servings" min="1" />
+      </div>
+    </div>
+
+    <!-- Visibility -->
+    <div class="form-group">
+      <label class="form-label">Visibilité</label>
+      <select class="form-select" formControlName="visibility">
+        <option value="private">Privée</option>
+        <option value="friends">Amis</option>
+        <option value="public">Publique</option>
+      </select>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-group">
+      <label class="form-label">Tags (séparés par des virgules)</label>
+      <input type="text" class="form-input" formControlName="tags" placeholder="végétarien, rapide, sans gluten..." />
+    </div>
+
+    <!-- Ingredients -->
+    <div class="form-group">
+      <label class="form-label">Ingrédients</label>
+      <div formArrayName="ingredients" class="recipe-form__ingredients">
+        @for (ctrl of ingredientsArray.controls; track $index) {
+          <div class="recipe-form__ingredient" [formGroupName]="$index">
+            <span class="recipe-form__ing-name">{{ ctrl.get('ingredientName')?.value }}</span>
+            <input type="number" class="form-input form-input--sm" formControlName="quantity" placeholder="Qté" min="0" step="0.1" />
+            <select class="form-select form-select--sm" formControlName="unit">
+              <option value="">—</option>
+              @for (opt of unitOptions; track opt[0]) {
+                <option [value]="opt[0]">{{ opt[1] }}</option>
+              }
+            </select>
+            <input type="text" class="form-input form-input--sm" formControlName="note" placeholder="Note" />
+            <button type="button" class="btn-ghost btn-sm" (click)="removeIngredient($index)">✕</button>
+          </div>
+        }
+      </div>
+      <app-ingredient-input
+        placeholder="Ajouter un ingrédient..."
+        (selected)="addIngredient($event)"
+      />
+    </div>
+
+    <!-- Steps -->
+    <div class="form-group">
+      <label class="form-label">Étapes *</label>
+      <div formArrayName="steps" class="recipe-form__steps">
+        @for (ctrl of stepsArray.controls; track $index) {
+          <div class="recipe-form__step">
+            <span class="recipe-form__step-num">{{ $index + 1 }}</span>
+            <textarea
+              class="form-textarea"
+              [formControlName]="$index"
+              rows="2"
+              placeholder="Décris cette étape..."
+            ></textarea>
+            <button type="button" class="btn-ghost btn-sm" (click)="removeStep($index)" [disabled]="stepsArray.length === 1">✕</button>
+          </div>
+        }
+      </div>
+      <button type="button" class="btn-ghost btn-sm" (click)="addStep()">+ Ajouter une étape</button>
+    </div>
+
+    <div class="recipe-form__submit">
+      <button type="submit" class="btn-primary" [disabled]="loading()">
+        @if (loading()) { Sauvegarde... } @else { {{ isEdit ? 'Mettre à jour' : 'Créer la recette' }} }
+      </button>
+    </div>
+  </form>
+</div>

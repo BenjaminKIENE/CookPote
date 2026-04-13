@@ -1,0 +1,76 @@
+@if (loading()) {
+  <div class="spinner"></div>
+} @else if (recipe()) {
+  <article class="recipe-detail">
+    @if (recipe()!.photoPath) {
+      <img class="recipe-detail__photo" [src]="uploadsBase + recipe()!.photoPath" [alt]="recipe()!.title" />
+    }
+
+    <div class="recipe-detail__header">
+      <div>
+        <span class="badge">{{ categoryLabels[recipe()!.category] }}</span>
+        <h1>{{ recipe()!.title }}</h1>
+        <p class="recipe-detail__author">par {{ recipe()!.authorPseudo }}</p>
+        @if (recipe()!.description) {
+          <p class="recipe-detail__desc">{{ recipe()!.description }}</p>
+        }
+      </div>
+      @if (isOwner) {
+        <a [routerLink]="['/app/recipes', recipe()!.id, 'edit']" class="btn-ghost btn-sm">Modifier</a>
+      }
+    </div>
+
+    <div class="recipe-detail__meta">
+      <span class="badge badge--{{ recipe()!.difficulty }}">{{ difficultyLabels[recipe()!.difficulty] }}</span>
+      @if (recipe()!.prepTimeMin) { <span>⏱ Prép. {{ recipe()!.prepTimeMin }} min</span> }
+      @if (recipe()!.cookTimeMin) { <span>🔥 Cuisson {{ recipe()!.cookTimeMin }} min</span> }
+    </div>
+
+    @if (recipe()!.tags.length) {
+      <div class="recipe-detail__tags">
+        @for (tag of recipe()!.tags; track tag) {
+          <span class="badge">{{ tag }}</span>
+        }
+      </div>
+    }
+
+    <!-- Servings scaler -->
+    <div class="recipe-detail__servings">
+      <button class="btn-ghost btn-sm" (click)="changeServings(-1)">−</button>
+      <span>{{ scaledServings }} portion{{ scaledServings > 1 ? 's' : '' }}</span>
+      <button class="btn-ghost btn-sm" (click)="changeServings(1)">+</button>
+    </div>
+
+    <!-- Ingredients -->
+    @if (recipe()!.ingredients.length) {
+      <section class="recipe-detail__section">
+        <h2>Ingrédients</h2>
+        <ul class="recipe-detail__ingredients">
+          @for (ing of recipe()!.ingredients; track ing.id) {
+            <li>
+              @if (ing.quantity) {
+                <strong>{{ ing.quantity | scaleQuantity:servingsFactor() }}
+                @if (ing.unit && ing.unit !== 'agout') { {{ unitLabels[ing.unit] }} }
+                </strong>
+              }
+              {{ ing.ingredientName }}
+              @if (ing.note) { <em>— {{ ing.note }}</em> }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <!-- Steps -->
+    <section class="recipe-detail__section">
+      <h2>Préparation</h2>
+      <ol class="recipe-detail__steps">
+        @for (step of recipe()!.steps; track $index) {
+          <li>{{ step }}</li>
+        }
+      </ol>
+    </section>
+  </article>
+} @else {
+  <div class="empty-state"><p>Recette introuvable.</p></div>
+}

@@ -1,0 +1,178 @@
+@if (loading()) {
+  <div class="spinner"></div>
+} @else if (profile()) {
+  <div class="profile-page">
+    <h1>Mon profil</h1>
+
+    <!-- ── Carte identité ───────────────────────────────────────────────── -->
+    <div class="profile-card">
+      <div class="profile-card__avatar-wrap">
+        @if (profile()!.avatar_path) {
+          <img [src]="uploadsBase + profile()!.avatar_path" class="profile-card__avatar" alt="Avatar" />
+        } @else {
+          <div class="profile-card__avatar-placeholder">{{ profile()!.pseudo.charAt(0).toUpperCase() }}</div>
+        }
+        <label class="btn-ghost btn-sm profile-card__avatar-btn">
+          Changer
+          <input type="file" accept="image/*" (change)="onAvatarChange($event)" hidden />
+        </label>
+      </div>
+
+      <div class="profile-card__info">
+        <p class="profile-card__email">{{ profile()!.email }}</p>
+        <p class="profile-card__stat">{{ profile()!.recipe_count }} recette{{ profile()!.recipe_count !== 1 ? 's' : '' }}</p>
+      </div>
+    </div>
+
+    <!-- ── Infos publiques ──────────────────────────────────────────────── -->
+    <section class="profile-section">
+      <h2 class="profile-section__title">Infos publiques</h2>
+      <form [formGroup]="form" (ngSubmit)="save()" class="profile-form">
+        <div class="form-group">
+          <label class="form-label">Pseudo</label>
+          <input type="text" class="form-input" formControlName="pseudo" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bio</label>
+          <textarea class="form-textarea" formControlName="bio" rows="3" placeholder="Quelques mots sur toi..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary" [disabled]="saving()">
+          {{ saving() ? 'Sauvegarde...' : 'Sauvegarder' }}
+        </button>
+      </form>
+    </section>
+
+    <!-- ── Sécurité — Mot de passe ──────────────────────────────────────── -->
+    <section class="profile-section">
+      <h2 class="profile-section__title">Mot de passe</h2>
+      @if (!showPasswordForm()) {
+        <button class="btn-ghost btn-sm" (click)="showPasswordForm.set(true)">Changer le mot de passe</button>
+      } @else {
+        <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordChange()" class="profile-form">
+          <div class="form-group">
+            <label class="form-label">Mot de passe actuel</label>
+            <input type="password" class="form-input" formControlName="currentPassword" autocomplete="current-password" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nouveau mot de passe</label>
+            <input type="password" class="form-input" formControlName="newPassword" autocomplete="new-password" />
+            @if (passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors?.['minlength']) {
+              <p class="form-error">Minimum 8 caractères.</p>
+            }
+            @if (passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors?.['pattern']) {
+              <p class="form-error">Au moins une majuscule et un chiffre requis.</p>
+            }
+          </div>
+          <div class="profile-form__actions">
+            <button type="submit" class="btn-primary btn-sm" [disabled]="savingPassword()">
+              {{ savingPassword() ? 'Sauvegarde...' : 'Confirmer' }}
+            </button>
+            <button type="button" class="btn-ghost btn-sm" (click)="showPasswordForm.set(false); passwordForm.reset()">Annuler</button>
+          </div>
+        </form>
+      }
+    </section>
+
+    <!-- ── Sécurité — Email ─────────────────────────────────────────────── -->
+    <section class="profile-section">
+      <h2 class="profile-section__title">Adresse email</h2>
+      @if (!showEmailForm()) {
+        <p class="profile-section__current">Actuelle&nbsp;: <strong>{{ profile()!.email }}</strong></p>
+        <button class="btn-ghost btn-sm" (click)="showEmailForm.set(true)">Changer l'email</button>
+      } @else {
+        <form [formGroup]="emailForm" (ngSubmit)="submitEmailChange()" class="profile-form">
+          <div class="form-group">
+            <label class="form-label">Nouvel email</label>
+            <input type="email" class="form-input" formControlName="newEmail" autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirme ton mot de passe</label>
+            <input type="password" class="form-input" formControlName="password" autocomplete="current-password" />
+          </div>
+          <p class="profile-section__hint">Un email de confirmation sera envoyé à la nouvelle adresse.</p>
+          <div class="profile-form__actions">
+            <button type="submit" class="btn-primary btn-sm" [disabled]="savingEmail()">
+              {{ savingEmail() ? 'Envoi...' : 'Envoyer la confirmation' }}
+            </button>
+            <button type="button" class="btn-ghost btn-sm" (click)="showEmailForm.set(false); emailForm.reset()">Annuler</button>
+          </div>
+        </form>
+      }
+    </section>
+
+    <!-- ── Sécurité — Double authentification (2FA) ─────────────────────── -->
+    <section class="profile-section">
+      <h2 class="profile-section__title">Double authentification (2FA)</h2>
+
+      @if (profile()!.totp_enabled === 1) {
+        <!-- 2FA activée -->
+        <div class="profile-2fa profile-2fa--active">
+          <span class="profile-2fa__badge">Activée</span>
+          <p>La 2FA TOTP est active sur ton compte. Tu dois saisir un code depuis ton application d'authentification à chaque connexion.</p>
+          @if (!showDisable2FA()) {
+            <button class="btn-ghost btn-sm" (click)="showDisable2FA.set(true)">Désactiver la 2FA</button>
+          } @else {
+            <form [formGroup]="totpDisableForm" (ngSubmit)="disable2FA()" class="profile-form">
+              <div class="form-group">
+                <label class="form-label">Confirme ton mot de passe pour désactiver</label>
+                <input type="password" class="form-input" formControlName="password" autocomplete="current-password" />
+              </div>
+              <div class="profile-form__actions">
+                <button type="submit" class="btn-primary btn-sm" [disabled]="savingTotp()">
+                  {{ savingTotp() ? 'Désactivation...' : 'Désactiver' }}
+                </button>
+                <button type="button" class="btn-ghost btn-sm" (click)="showDisable2FA.set(false); totpDisableForm.reset()">Annuler</button>
+              </div>
+            </form>
+          }
+        </div>
+      } @else {
+        <!-- 2FA désactivée -->
+        <div class="profile-2fa">
+          <p>La double authentification n'est pas activée. Ajoute une couche de sécurité supplémentaire avec une application comme Google Authenticator ou Authy.</p>
+
+          @if (!totpSetupQr()) {
+            <button class="btn-primary btn-sm" (click)="setup2FA()" [disabled]="savingTotp()">
+              {{ savingTotp() ? 'Chargement...' : 'Configurer la 2FA' }}
+            </button>
+          } @else {
+            <div class="profile-2fa__setup">
+              <p><strong>1. Scanne ce QR code</strong> avec ton application d'authentification :</p>
+              <img class="profile-2fa__qr" [src]="totpSetupQr()!" alt="QR Code 2FA" />
+              <p class="profile-2fa__secret">
+                Ou entre la clé manuellement : <code>{{ totpSetupSecret() }}</code>
+              </p>
+              <p><strong>2. Entre le code à 6 chiffres</strong> généré par l'application pour confirmer :</p>
+              <form [formGroup]="totpCodeForm" (ngSubmit)="enable2FA()" class="profile-form">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-input form-input--code"
+                    formControlName="code"
+                    placeholder="000000"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                  />
+                </div>
+                <div class="profile-form__actions">
+                  <button type="submit" class="btn-primary btn-sm" [disabled]="savingTotp()">
+                    {{ savingTotp() ? 'Vérification...' : 'Activer la 2FA' }}
+                  </button>
+                  <button type="button" class="btn-ghost btn-sm" (click)="totpSetupQr.set(null); totpCodeForm.reset()">Annuler</button>
+                </div>
+              </form>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- ── Données & danger zone ────────────────────────────────────────── -->
+    <div class="profile-danger">
+      <h2>Données & confidentialité</h2>
+      <button class="btn-ghost" (click)="exportData()">Exporter mes données (JSON)</button>
+      <button class="btn-ghost btn-sm profile-danger__delete" (click)="deleteAccount()">Supprimer mon compte</button>
+    </div>
+  </div>
+}

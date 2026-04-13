@@ -1,0 +1,40 @@
+<div class="recipe-list">
+  <div class="recipe-list__header">
+    <h1>Mes recettes</h1>
+    <a routerLink="/app/recipes/new" class="btn-primary">+ Nouvelle recette</a>
+  </div>
+
+  <div class="recipe-list__filters">
+    <input
+      type="search"
+      class="form-input"
+      [(ngModel)]="q"
+      (input)="load(true)"
+      placeholder="Rechercher..."
+    />
+  </div>
+
+  <div class="recipe-grid">
+    @for (recipe of recipes(); track recipe.id) {
+      <div class="recipe-list__item">
+        <app-recipe-card [recipe]="recipe" />
+        <div class="recipe-list__actions">
+          <a [routerLink]="['/app/recipes', recipe.id, 'edit']" class="btn-ghost btn-sm">Modifier</a>
+          <button class="btn-ghost btn-sm btn-danger" (click)="delete(recipe.id)">Supprimer</button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (recipes().length === 0 && !loading()) {
+    <div class="empty-state">
+      <p>Aucune recette. <a routerLink="/app/recipes/new">Créez-en une !</a></p>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="feed__loading">Chargement...</div>
+  }
+
+  <app-infinite-scroll [disabled]="loading() || !nextCursor()" (scrolled)="load()" />
+</div>

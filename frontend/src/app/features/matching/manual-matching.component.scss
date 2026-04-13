@@ -1,0 +1,88 @@
+@use 'styles/variables' as v;
+
+.matching-page {
+  max-width: 760px;
+  margin: 0 auto;
+
+  h1 { font-family: v.$font-display; font-size: 1.75rem; margin-bottom: .25rem; }
+  &__subtitle { color: v.$text-secondary; margin-bottom: 1.25rem; }
+  &__input { margin-bottom: 1rem; }
+  &__loading { text-align: center; padding: 2rem; color: v.$text-secondary; }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: v.$cream-dark;
+  border-radius: 99px;
+  padding: .3rem .75rem;
+  font-size: .85rem;
+  color: v.$text-primary;
+
+  &__remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    color: v.$text-secondary;
+    padding: 0;
+    &:hover { color: var(--color-error); }
+  }
+}
+
+.matching-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.match-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-template-rows: auto auto;
+  gap: .5rem 1rem;
+  align-items: start;
+
+  &__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1rem;
+  }
+
+  &__pct {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: v.$terracotta;
+  }
+
+  &__frac {
+    font-size: .75rem;
+    color: v.$text-muted;
+  }
+
+  &__card { grid-column: 2; }
+
+  &__missing {
+    grid-column: 2;
+    font-size: .8rem;
+    color: v.$text-secondary;
+    margin: 0;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: v.$text-secondary;
+}

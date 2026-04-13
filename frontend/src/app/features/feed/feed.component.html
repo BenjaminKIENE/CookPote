@@ -1,0 +1,52 @@
+<div class="feed">
+  <div class="feed__header">
+    <h1 class="feed__title">Découvrir</h1>
+
+    <div class="feed__filters">
+      <input
+        type="search"
+        class="form-input feed__search"
+        [(ngModel)]="q"
+        (input)="onFilterChange()"
+        placeholder="Rechercher une recette..."
+      />
+      <select class="form-select" [(ngModel)]="category" (change)="onFilterChange()">
+        <option value="">Toutes catégories</option>
+        @for (opt of categoryOptions; track opt[0]) {
+          <option [value]="opt[0]">{{ opt[1] }}</option>
+        }
+      </select>
+      <select class="form-select" [(ngModel)]="difficulty" (change)="onFilterChange()">
+        <option value="">Toutes difficultés</option>
+        @for (opt of difficultyOptions; track opt[0]) {
+          <option [value]="opt[0]">{{ opt[1] }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (error()) {
+    <p class="feed__error">{{ error() }}</p>
+  }
+
+  <div class="recipe-grid">
+    @for (recipe of recipes(); track recipe.id) {
+      <app-recipe-card [recipe]="recipe" />
+    }
+  </div>
+
+  @if (recipes().length === 0 && !loading()) {
+    <div class="empty-state">
+      <p>Aucune recette trouvée.</p>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="feed__loading">Chargement...</div>
+  }
+
+  <app-infinite-scroll
+    [disabled]="loading() || !nextCursor()"
+    (scrolled)="load()"
+  />
+</div>

@@ -1,0 +1,92 @@
+@use 'styles/variables' as v;
+
+.recipe-form-page {
+  max-width: 720px;
+  margin: 0 auto;
+
+  h1 {
+    font-family: v.$font-display;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.recipe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__preview {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: .75rem;
+  }
+
+  &__ingredients {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: .75rem;
+  }
+
+  &__ingredient {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
+  &__ing-name {
+    font-weight: 500;
+    min-width: 100px;
+    flex: 1;
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-bottom: .75rem;
+  }
+
+  &__step {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+  }
+
+  &__step-num {
+    width: 28px;
+    height: 28px;
+    background: v.$terracotta;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: .5rem;
+  }
+
+  &__submit {
+    padding-top: .75rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.form-input--sm, .form-select--sm {
+  max-width: 90px;
+  padding: .35rem .6rem;
+  font-size: .85rem;
+}

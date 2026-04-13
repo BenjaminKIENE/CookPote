@@ -1,0 +1,29 @@
+<div class="ingredient-input">
+  <input
+    type="text"
+    class="form-input"
+    [(ngModel)]="query"
+    (input)="onInput()"
+    [placeholder]="placeholder"
+    autocomplete="off"
+  />
+  @if (loading()) {
+    <div class="ingredient-input__spinner"></div>
+  }
+  @if (isOpen()) {
+    <ul class="ingredient-input__dropdown" role="listbox">
+      @for (item of results(); track item.id) {
+        <li
+          class="ingredient-input__option"
+          role="option"
+          (click)="select(item)"
+          (keydown.enter)="select(item)"
+          tabindex="0"
+        >
+          {{ item.nomCanonique }}
+          <span class="ingredient-input__cat">{{ item.categorie }}</span>
+        </li>
+      }
+    </ul>
+  }
+</div>

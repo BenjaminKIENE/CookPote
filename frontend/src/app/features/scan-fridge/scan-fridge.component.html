@@ -1,0 +1,48 @@
+<div class="scan-page">
+  <h1>Scan Frigo</h1>
+  <p class="scan-page__subtitle">Prends une photo de ton frigo, on trouve les recettes.</p>
+
+  @if (quota()) {
+    <div class="scan-page__quota">
+      Scans ce mois : <strong>{{ quota()!.used }} / {{ quota()!.total }}</strong>
+    </div>
+  }
+
+  <label class="scan-page__upload" [class.is-scanning]="scanning()">
+    @if (scanning()) {
+      <div class="spinner"></div>
+      <span>Analyse en cours...</span>
+    } @else if (preview()) {
+      <img [src]="preview()!" alt="Aperçu" class="scan-page__preview" />
+      <span>Cliquer pour rescanner</span>
+    } @else {
+      <div class="scan-page__icon">📷</div>
+      <span>Prendre / choisir une photo</span>
+    }
+    <input type="file" accept="image/*" capture="environment" (change)="onFileChange($event)" hidden [disabled]="scanning()" />
+  </label>
+
+  @if (result()) {
+    <div class="scan-page__detected">
+      <h2>Ingrédients détectés</h2>
+      <div class="scan-page__tags">
+        @for (name of result()!.detectedIngredients; track name) {
+          <span class="badge">{{ name }}</span>
+        }
+      </div>
+    </div>
+
+    @if (recipes.length > 0) {
+      <h2>Recettes correspondantes</h2>
+      <div class="recipe-grid">
+        @for (recipe of recipes; track recipe.id) {
+          <app-recipe-card [recipe]="recipe" />
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <p>Aucune recette trouvée. <a routerLink="/app/matching">Essaie le matching manuel</a>.</p>
+      </div>
+    }
+  }
+</div>

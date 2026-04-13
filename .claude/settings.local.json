@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npx -y ng version)",
+      "Read(//d/Development/PersonalProjects/**)",
+      "Bash(npm show:*)",
+      "Bash(npm install:*)",
+      "Bash(where python:*)",
+      "Bash(npm config:*)",
+      "Bash(npm rebuild:*)",
+      "Bash(npx -y @angular/cli@latest new frontend --routing --style=scss --standalone --skip-git --skip-install)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d['projects']['frontend']['architect']['build']['options'].get\\('stylePreprocessorOptions', {}\\), indent=2\\)\\)\")",
+      "Bash(python -c ':*)",
+      "Bash(node -e \"require\\('better-sqlite3'\\)\")",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const k = require\\('kysely'\\); console.log\\(Object.keys\\(k\\).filter\\(k => k.toLowerCase\\(\\).includes\\('sqlite'\\) || k.toLowerCase\\(\\).includes\\('dialect'\\)\\)\\)\")",
+      "Bash(grep -E \"^fastify$\")",
+      "Bash(npm list:*)",
+      "Bash(node -e \"const t = require\\('d:/Development/PersonalProjects/CookPote/backend/node_modules/@fastify/rate-limit'\\); console.log\\(typeof t\\)\")",
+      "Bash(npm run:*)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(node -e ':*)",
+      "Bash(npx prebuild-install:*)",
+      "Read(//c/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/**)",
+      "Read(//c/Program Files/Microsoft Visual Studio/2022/**)",
+      "Read(//c/Program Files \\(x86\\)/Microsoft Visual Studio/**)",
+      "Bash(GYP_MSVS_VERSION=2022 npm rebuild better-sqlite3)",
+      "Bash(npx node-gyp@latest rebuild --msvs_version=2022 --loglevel=silly)",
+      "Bash(grep -E \"\\(find VS|MSVC|version|ok$|error\\)\")"
+    ]
+  }
+}
